@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class main {
 	public static int[][] GRILLE = new int[6][7];
@@ -23,7 +24,7 @@ public class main {
 	public static void jouer(int[][] grille, int numero, int c) {
 		for (int l = 0; l < grille.length; l++) {
 			if (grille[l][c] == 0) {
-				grille[l][c] = JOUEUR;
+				grille[l][c] = numero;
 				break;
 			}
 		}
@@ -90,9 +91,10 @@ public class main {
 			afficheGrille();
 			JOUEUR = JOUEUR == 1 ? 2 : 1;
 			if (JOUEUR == 1) {
-				jouer(JOUEUR, saisirUnNombre());
+//				jouer(JOUEUR, saisirUnNombre());
+				joueCoupRandom3();
 			} else {
-				joueCoupRandom2();
+				joueCoupRandom3();
 			}
 		}
 
@@ -131,16 +133,49 @@ public class main {
 		int coup = -1;
 		for (int i = 0; i < grille[0].length; i++) {
 			grille = cloneArray(GRILLE);
-			jouer(grille, 2, i);
-			if (aGagne.aGagne(grille, 2)) {
+			jouer(grille, JOUEUR, i);
+			if (aGagne.aGagne(grille, JOUEUR)) {
 				coup = i;
 			}
 		}
 		if (coup != -1) {
-			jouer(2, coup);
+			jouer(JOUEUR, coup);
 		} else {
 			joueCoupRandom();
 		}
+	}
+
+	public static void joueCoupRandom3() {
+		int[][] grille1 = cloneArray(GRILLE);
+		int[][] grille2 = cloneArray(grille1);
+		int coup = -1;
+		Random rand = new Random();
+		int lautreJoueur = JOUEUR == 1 ? 2 : 1;
+		ArrayList<Integer> coupPossible = new ArrayList<Integer>();
+		for (int i = 0; i < grille1[0].length; i++) coupPossible.add(i);
+
+		for (int i = 0; i < grille1[0].length; i++) {
+			grille1 = cloneArray(GRILLE);
+
+			if (aGagne.aGagne(grille1, JOUEUR) || aGagne.aGagne(grille1, lautreJoueur)) {
+//				Gagner ou empêcher jouer 1 de gagner
+				coup = i;
+			} else {
+				for (int j = 0; j < grille2[0].length; j++) {
+					grille2 = cloneArray(grille1);
+//					Détecter si jouer 1 arrive à gagner ensuite
+					jouer(grille2, lautreJoueur, j);
+					if (aGagne.aGagne(grille2, lautreJoueur)) {
+						if (coupPossible.contains(i)) coupPossible.remove(coupPossible.indexOf(i));
+					}
+				}
+			}
+
+		}
+		if (coup == -1) {
+			coup = coupPossible.size() != 0 ? coupPossible.get(rand.nextInt(coupPossible.size())) : rand.nextInt(7);
+		}
+		jouer(JOUEUR, coup);
 	}
 
 	public static void main(String[] args) {
