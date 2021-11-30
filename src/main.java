@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -7,7 +8,6 @@ public class main {
 	public static Scanner SC = new Scanner(System.in);
 	public static boolean verbose = true;
 
-	//	Exercice 1
 	public static void initialiseGrille() {
 		for (int l = 0; l < GRILLE.length; l++) {
 			for (int c = 0; c < GRILLE[0].length; c++) {
@@ -16,17 +16,19 @@ public class main {
 		}
 	}
 
-	//  Exercice 2
 	public static void jouer(int numero, int c) {
-		for (int l = 0; l < GRILLE.length; l++) {
-			if (GRILLE[l][c] == 0) {
-				GRILLE[l][c] = JOUEUR;
+		jouer(GRILLE, numero, c);
+	}
+
+	public static void jouer(int[][] grille, int numero, int c) {
+		for (int l = 0; l < grille.length; l++) {
+			if (grille[l][c] == 0) {
+				grille[l][c] = JOUEUR;
 				break;
 			}
 		}
 	}
 
-	//	Exercice 3
 	public static void afficheGrille() {
 		String output = "";
 		for (int l = GRILLE.length - 1; l >= 0; l--) {
@@ -51,69 +53,6 @@ public class main {
 		System.out.println(output);
 	}
 
-	public static boolean aGagneHor(int numero, int y, int x) {
-		int count = 0;
-		for (int c = x; (c < GRILLE[0].length) && (c <= x + 4); c++) {
-			if (GRILLE[y][c] == numero) {
-				count++;
-			}
-		}
-		return (count == 4);
-	}
-
-	public static boolean aGagneVer(int numero, int y, int x) {
-		int count = 0;
-		for (int l = y; (l < GRILLE.length) && (l <= y + 4); l++) {
-			if (GRILLE[l][x] == numero) {
-				count++;
-			}
-		}
-		return (count == 4);
-	}
-
-
-	public static boolean aGagneDiagMont(int numero, int y, int x) {
-		int count = 0;
-		for (int l = y, c = x; ((l >= 0) && (l >= y - 4)) && ((c < GRILLE[0].length) && (c <= x + 4)); l--, c++) {
-			if (GRILLE[l][c] == numero) {
-				count++;
-			}
-		}
-		return (count == 4);
-	}
-
-	public static boolean aGagneDiagDesc(int numero, int y, int x) {
-		int count = 0;
-		for (int l = y, c = x; ((l < GRILLE.length) && (l <= y + 4)) && ((c < GRILLE[0].length) && (c <= x + 4)); l++, c++) {
-			if (GRILLE[l][c] == numero) {
-				count++;
-			}
-		}
-		return (count == 4);
-	}
-
-	public static boolean aGagne(int numero) {
-		boolean output = false;
-		for (int l = 0; l < GRILLE.length; l++) {
-			for (int c = 0; c < GRILLE[0].length; c++) {
-				output |= aGagneHor(numero, l, c) || aGagneVer(numero, l, c) || aGagneDiagMont(numero, l, c) || aGagneDiagDesc(numero, l, c);
-				if (verbose) {
-					if (aGagneHor(numero, l, c)){
-						System.out.println("aGagneHor" + l + c + numero);
-					}if (aGagneVer(numero, l, c)){
-						System.out.println("aGagneVer" + l + c + numero);
-					}if (aGagneDiagMont(numero, l, c)){
-						System.out.println("aGagneDiagMont" + l + c + numero);
-					}if (aGagneDiagDesc(numero, l, c)){
-						System.out.println("aGagneDiagDesc" + l + c + numero);
-					}
-				}
-			}
-		}
-		return output;
-	}
-
-
 	public static boolean pasDeZero() {
 		int count = 0;
 		for (int l = 0; l < GRILLE.length; l++) {
@@ -127,7 +66,7 @@ public class main {
 	}
 
 	public static boolean matchNul() {
-		return (aGagne(1) == aGagne(2));
+		return (aGagne.aGagne(1) == aGagne.aGagne(2));
 	}
 
 	public static int saisirUnNombre() {
@@ -153,19 +92,27 @@ public class main {
 			if (JOUEUR == 1) {
 				jouer(JOUEUR, saisirUnNombre());
 			} else {
-				joueCoupRandom();
+				joueCoupRandom2();
 			}
 		}
 
 		clearScreen();
 		afficheGrille();
-		if (aGagne(1)) {
+		if (aGagne.aGagne(1)) {
 			System.out.println("Le joueur " + 1 + " a gagné");
-		} else if (aGagne(2)) {
+		} else if (aGagne.aGagne(2)) {
 			System.out.println("Le joueur " + 2 + " a gagné");
 		} else {
 			System.out.println("Match nul");
 		}
+	}
+
+	public static int[][] cloneArray(int[][] arr) {
+		int[][] output = new int[arr.length][arr[0].length];
+		for (int i = 0; i < arr.length; i++) {
+			output[i] = arr[i].clone();
+		}
+		return output;
 	}
 
 	public static void joueCoupRandom() {
@@ -179,17 +126,20 @@ public class main {
 		}
 	}
 
-
 	public static void joueCoupRandom2() {
-		int[][] backup = GRILLE.clone();
-		for (int coup = 0; coup < 7; coup++) {
-			for (int l = 0; l < GRILLE.length; l++) {
-				if (GRILLE[l][coup] == 0) {
-					GRILLE[l][coup] = JOUEUR;
-					break;
-				}
+		int[][] grille = cloneArray(GRILLE);
+		int coup = -1;
+		for (int i = 0; i < grille[0].length; i++) {
+			grille = cloneArray(GRILLE);
+			jouer(grille, 2, i);
+			if (aGagne.aGagne(grille, 2)) {
+				coup = i;
 			}
-			aGagne(2);
+		}
+		if (coup != -1) {
+			jouer(2, coup);
+		} else {
+			joueCoupRandom();
 		}
 	}
 
