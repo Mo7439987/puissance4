@@ -8,6 +8,7 @@ public class main {
 	public static int JOUEUR = 0;
 	public static Scanner SC = new Scanner(System.in);
 	public static boolean verbose = true;
+	public static int[] dernierPoint = new int[2];
 
 	public static void initialiseGrille() {
 		for (int l = 0; l < GRILLE.length; l++) {
@@ -25,8 +26,28 @@ public class main {
 		for (int l = 0; l < grille.length; l++) {
 			if (grille[l][c] == 0) {
 				grille[l][c] = numero;
+				dernierPoint[0] = c;
+				dernierPoint[1] = l;
 				break;
 			}
+		}
+	}
+
+	public static void print_table_color(int[][] tab, int col, int row) {
+		col = dernierPoint[0];
+		row = dernierPoint[1];
+		int rows = tab.length;                                          // nombre de lignes
+		int cols = tab[0].length;                                       // nombre de colonnes
+		String[] colors = {"\033[0;37m", "\033[0;31m", "\033[0;34m"};   // codes couleurs
+		String[] colors_u = {"\033[4;37m", "\033[4;31m", "\033[4;34m"}; // codes couleurs underline
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if ((i == row) && (j == col)) {
+					System.out.print(colors_u[tab[i][j]] + "X");        // affiche le point en argument (underline)
+				} else System.out.print(colors[tab[i][j]] + "X");
+				System.out.print("\033[0;37m" + "  ");                  // remet la couleur par default
+			}
+			System.out.println();
 		}
 	}
 
@@ -149,7 +170,7 @@ public class main {
 		int[][] grille1 = cloneArray(GRILLE);
 		int[][] grille2 = cloneArray(grille1);
 		int coup = -1;
-		Random rand = new Random();
+
 		int lautreJoueur = JOUEUR == 1 ? 2 : 1;
 		ArrayList<Integer> coupPossible = new ArrayList<Integer>();
 		for (int i = 0; i < grille1[0].length; i++) coupPossible.add(i);
@@ -157,9 +178,9 @@ public class main {
 		for (int i = 0; i < grille1[0].length; i++) {
 			grille1 = cloneArray(GRILLE);
 
-			if (aGagne.aGagne(grille1, JOUEUR) || aGagne.aGagne(grille1, lautreJoueur)) {
-//				Gagner ou empêcher jouer 1 de gagner
+			if (aGagne.aGagne(grille1, JOUEUR)) {
 				coup = i;
+				break;
 			} else {
 				for (int j = 0; j < grille2[0].length; j++) {
 					grille2 = cloneArray(grille1);
@@ -173,6 +194,7 @@ public class main {
 
 		}
 		if (coup == -1) {
+			Random rand = new Random();
 			coup = coupPossible.size() != 0 ? coupPossible.get(rand.nextInt(coupPossible.size())) : rand.nextInt(7);
 		}
 		jouer(JOUEUR, coup);
