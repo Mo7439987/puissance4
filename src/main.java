@@ -187,7 +187,9 @@ public class main {
 //					Détecter si jouer 1 arrive à gagner ensuite
 					jouer(grille2, lautreJoueur, j);
 					if (aGagne.aGagne(grille2, lautreJoueur)) {
-						if (coupPossible.contains(i)) coupPossible.remove(coupPossible.indexOf(i));
+						if (coupPossible.contains(i)) {
+							coupPossible.remove(coupPossible.indexOf(i));
+						}
 					}
 				}
 			}
@@ -195,7 +197,11 @@ public class main {
 		}
 		if (coup == -1) {
 			Random rand = new Random();
-			coup = coupPossible.size() != 0 ? coupPossible.get(rand.nextInt(coupPossible.size())) : rand.nextInt(7);
+			if (coupPossible.size() != 0) {
+				coup = coupPossible.get(rand.nextInt(coupPossible.size()));
+			} else {
+				coup = rand.nextInt(7);
+			}
 		}
 		jouer(JOUEUR, coup);
 	}
