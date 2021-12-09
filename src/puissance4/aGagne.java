@@ -1,3 +1,5 @@
+package puissance4;
+
 public class aGagne {
 	public static boolean aGagneHor(int numero, int y, int x) {
 		return aGagneHor(main.GRILLE, numero, y, x);

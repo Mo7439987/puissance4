@@ -1,7 +1,10 @@
-import java.util.Arrays;
+package puissance4;
+
 import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
+
+import static puissance4.aGagne.aGagne;
 
 public class main {
 
@@ -94,7 +97,7 @@ public class main {
 
 	//	Exercice 4.5
 	public static boolean matchNul() {
-		return (aGagne.aGagne(1) == aGagne.aGagne(2));
+		return (aGagne(1) == aGagne(2));
 	}
 
 	public static int saisirUnNombre() {
@@ -129,9 +132,9 @@ public class main {
 
 		clearScreen();
 		afficheGrille();
-		if (aGagne.aGagne(1)) {
+		if (aGagne(1)) {
 			System.out.println("Le joueur " + 1 + " a gagné");
-		} else if (aGagne.aGagne(2)) {
+		} else if (aGagne(2)) {
 			System.out.println("Le joueur " + 2 + " a gagné");
 		} else {
 			System.out.println("Match nul");
@@ -164,7 +167,7 @@ public class main {
 		for (int i = 0; i < grille[0].length; i++) {
 			grille = cloneArray(GRILLE);
 			jouer(grille, JOUEUR, i);
-			if (aGagne.aGagne(grille, JOUEUR)) {
+			if (aGagne(grille, JOUEUR)) {
 				coup = i;
 			}
 		}
@@ -187,7 +190,7 @@ public class main {
 		for (int i = 0; i < grille1[0].length; i++) {
 			grille1 = cloneArray(GRILLE);
 
-			if (aGagne.aGagne(grille1, JOUEUR)) {
+			if (aGagne(grille1, JOUEUR)) {
 				coup = i;
 				break;
 			} else {
@@ -195,7 +198,7 @@ public class main {
 					grille2 = cloneArray(grille1);
 //					Détecter si jouer 1 arrive à gagner ensuite
 					jouer(grille2, lautreJoueur, j);
-					if (aGagne.aGagne(grille2, lautreJoueur)) {
+					if (aGagne(grille2, lautreJoueur)) {
 						if (coupPossible.contains(i)) {
 							coupPossible.remove(coupPossible.indexOf(i));
 						}
