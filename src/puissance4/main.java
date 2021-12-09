@@ -1,3 +1,8 @@
+/*
+L1 G2 CHIANG Léana, BLANDIN Yann
+Projet puissance4 du cours INF-1, 2021
+* */
+
 package puissance4;
 
 import java.util.Scanner;
@@ -37,24 +42,6 @@ public class main {
 				dernierPoint[1] = l;
 				break;
 			}
-		}
-	}
-
-	public static void print_table_color(int[][] tab, int col, int row) {
-		col = dernierPoint[0];
-		row = dernierPoint[1];
-		int rows = tab.length;                                          // nombre de lignes
-		int cols = tab[0].length;                                       // nombre de colonnes
-		String[] colors = {"\033[0;37m", "\033[0;31m", "\033[0;34m"};   // codes couleurs
-		String[] colors_u = {"\033[4;37m", "\033[4;31m", "\033[4;34m"}; // codes couleurs underline
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				if ((i == row) && (j == col)) {
-					System.out.print(colors_u[tab[i][j]] + "X");        // affiche le point en argument (underline)
-				} else System.out.print(colors[tab[i][j]] + "X");
-				System.out.print("\033[0;37m" + "  ");                  // remet la couleur par default
-			}
-			System.out.println();
 		}
 	}
 

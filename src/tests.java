@@ -1,4 +1,5 @@
 public class tests {
+
     public static void print_table_color(int[][] tab, int col, int row){
         int rows = tab.length;                                          // nombre de lignes
         int cols = tab[0].length;                                       // nombre de colonnes
