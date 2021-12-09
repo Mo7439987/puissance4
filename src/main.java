@@ -4,12 +4,15 @@ import java.util.Random;
 import java.util.ArrayList;
 
 public class main {
+
+	//	Exercice 1.1
 	public static int[][] GRILLE = new int[6][7];
 	public static int JOUEUR = 0;
 	public static Scanner SC = new Scanner(System.in);
 	public static boolean verbose = true;
 	public static int[] dernierPoint = new int[2];
 
+	//	Exercice 1.2
 	public static void initialiseGrille() {
 		for (int l = 0; l < GRILLE.length; l++) {
 			for (int c = 0; c < GRILLE[0].length; c++) {
@@ -18,6 +21,7 @@ public class main {
 		}
 	}
 
+	//	Exercice 2.1
 	public static void jouer(int numero, int c) {
 		jouer(GRILLE, numero, c);
 	}
@@ -51,6 +55,7 @@ public class main {
 		}
 	}
 
+	//	Exercice 3.1
 	public static void afficheGrille() {
 		String output = "";
 		for (int l = GRILLE.length - 1; l >= 0; l--) {
@@ -87,6 +92,7 @@ public class main {
 		return count == 0;
 	}
 
+	//	Exercice 4.5
 	public static boolean matchNul() {
 		return (aGagne.aGagne(1) == aGagne.aGagne(2));
 	}
@@ -104,6 +110,7 @@ public class main {
 		System.out.println(System.lineSeparator().repeat(5));
 	}
 
+	//	Exercice 5
 	public static void jeu() {
 
 		initialiseGrille();
@@ -112,8 +119,9 @@ public class main {
 			afficheGrille();
 			JOUEUR = JOUEUR == 1 ? 2 : 1;
 			if (JOUEUR == 1) {
-//				jouer(JOUEUR, saisirUnNombre());
-				joueCoupRandom3();
+				jouer(JOUEUR, saisirUnNombre());
+//				Laisse l'IA jouer avec l'IA
+//				joueCoupRandom3();
 			} else {
 				joueCoupRandom3();
 			}
@@ -138,6 +146,7 @@ public class main {
 		return output;
 	}
 
+	//	Exercice 6
 	public static void joueCoupRandom() {
 		Random rand = new Random();
 		int coup = rand.nextInt(7);

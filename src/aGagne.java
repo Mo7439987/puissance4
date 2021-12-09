@@ -19,6 +19,8 @@ public class aGagne {
 		return aGagne(main.GRILLE, numero);
 	}
 
+
+	//	Exercice 4.1
 	public static boolean aGagneHor(int[][] grille, int numero, int y, int x) {
 		int count = 0;
 		for (int c = x; (c < grille[0].length) && (c < x + 4); c++) {
@@ -29,6 +31,7 @@ public class aGagne {
 		return (count == 4);
 	}
 
+	//	Exercice 4.2
 	public static boolean aGagneVer(int[][] grille, int numero, int y, int x) {
 		int count = 0;
 		for (int l = y; (l < grille.length) && (l < y + 4); l++) {
